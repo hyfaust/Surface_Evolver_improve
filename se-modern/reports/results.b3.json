@@ -1,0 +1,156 @@
+{
+  "branch": "b3",
+  "case": "octa_topology",
+  "cases": [
+    {
+      "area": null,
+      "branch": "b3",
+      "case": "octa_topology",
+      "energy": null,
+      "grad_norm": null,
+      "iterations": 100,
+      "notes": "5 explicit operations plus 100 random operations; invariant failures 0; pop_edge chi shift 3",
+      "optimizer": "topology",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": null,
+      "wall_time": null
+    }
+  ],
+  "operations": [
+    {
+      "after": [
+        25,
+        72,
+        48
+      ],
+      "before": [
+        7,
+        18,
+        12
+      ],
+      "delta": [
+        18,
+        54,
+        36
+      ],
+      "euler_after": 1,
+      "euler_before": 1,
+      "notes": "octa.fe is a non-manifold film (four faces on some edges); the central vertex has valence 12 so pop_vertex does not apply to the datafile as given",
+      "operation": "refine(octa.fe, allow_nonmanifold)",
+      "passed": true
+    },
+    {
+      "after": [
+        3,
+        3,
+        1
+      ],
+      "before": [
+        4,
+        6,
+        3
+      ],
+      "delta": [
+        -1,
+        -3,
+        -2
+      ],
+      "euler_after": 1,
+      "euler_before": 1,
+      "notes": "three films around a valence-3 vertex merge into one face",
+      "operation": "pop_vertex(patch, 0)",
+      "passed": true
+    },
+    {
+      "after": [
+        4,
+        6,
+        4
+      ],
+      "before": [
+        6,
+        13,
+        6
+      ],
+      "delta": [
+        -2,
+        -7,
+        -2
+      ],
+      "euler_after": 2,
+      "euler_before": -1,
+      "notes": "three films sharing a triple line merge into one face; chi rises by 3",
+      "operation": "pop_edge(triple_line, 0)",
+      "passed": true
+    },
+    {
+      "after": [
+        5,
+        8,
+        4
+      ],
+      "before": [
+        5,
+        8,
+        4
+      ],
+      "delta": [
+        0,
+        0,
+        0
+      ],
+      "euler_after": 1,
+      "euler_before": 1,
+      "notes": "edge flip keeps V, E, F and chi unchanged",
+      "operation": "swap_edge(quad, 0)",
+      "passed": true
+    },
+    {
+      "after": [
+        100,
+        368,
+        276
+      ],
+      "before": [
+        100,
+        368,
+        276
+      ],
+      "delta": [
+        0,
+        0,
+        0
+      ],
+      "euler_after": 8,
+      "euler_before": 8,
+      "notes": "periodic structure: parsed and structurally validated only; periodic wrap is not a topology operation, and the SE absolute area is not reproduced because SE derives periodic facet areas from per-edge wrap flags",
+      "operation": "structural_validate(phelanc.fe)",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "se_reference": {
+    "euler": 1,
+    "faces": 12,
+    "vertices": 7
+  },
+  "sweep": {
+    "applied": {
+      "collapse_edge": 44,
+      "refine": 3,
+      "swap_edge": 50
+    },
+    "final_counts": [
+      407,
+      1215,
+      810
+    ],
+    "final_euler": 2,
+    "invariant_failures": 0,
+    "operations": 100,
+    "passed": true,
+    "rejected": 3
+  }
+}
