@@ -1,0 +1,10 @@
+.venv/
+.tmp/
+.tools/
+se-modern/**/__pycache__/
+se-modern/**/*.pyc
+se-modern/tmp/
+se-modern/reports/results.json
+se-modern/reports/smoke_cube.json
+se-modern/reports/*.png
+se-modern/reports/*.ply
