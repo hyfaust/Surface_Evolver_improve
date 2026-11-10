@@ -1,0 +1,90 @@
+{
+  "anisotropic_passed": true,
+  "branch": "b2",
+  "case": "sessile_cap",
+  "cases": [
+    {
+      "area": 1.0,
+      "branch": "b2",
+      "case": "periodic_graph",
+      "energy": 1.0,
+      "grad_norm": 9.71545742112388e-11,
+      "iterations": 236,
+      "notes": "area 1.023994363 -> 1.000000000 (plane 1.000000000, gap 0.00e+00); monotone=True",
+      "optimizer": "lbfgs",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": null,
+      "wall_time": null
+    },
+    {
+      "area": null,
+      "branch": "b2",
+      "case": "anisotropic",
+      "energy": 20.81369998711222,
+      "grad_norm": 2.398913062103298,
+      "iterations": 40,
+      "notes": "eps=0.1; energy 35.977676 -> 20.813700; 23 decreasing steps; monotone=True; axis symmetry error 0.00e+00",
+      "optimizer": "tr_newton_cg",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": null,
+      "wall_time": null
+    },
+    {
+      "area": null,
+      "branch": "b2",
+      "case": "anisotropic",
+      "energy": 21.537269528446082,
+      "grad_norm": 1.119356991768026,
+      "iterations": 58,
+      "notes": "eps=0.1; energy 35.977676 -> 21.537270; 58 decreasing steps; monotone=True; axis symmetry error 1.04e-14",
+      "optimizer": "lbfgs",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": null,
+      "wall_time": null
+    },
+    {
+      "area": 3.8262566146374413,
+      "branch": "b2",
+      "case": "sessile_cap",
+      "energy": 3.8262566146374413,
+      "grad_norm": null,
+      "iterations": 10,
+      "notes": "theta target 90.0 deg, measured 90.2452 deg, error 0.2452 deg; volume rel error 4.24e-15",
+      "optimizer": "augmented_lagrangian+lbfgs",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": 0.9940117329061061,
+      "wall_time": null
+    },
+    {
+      "area": 4.710677474246199,
+      "branch": "b2",
+      "case": "sessile_cap",
+      "energy": 1.8679890088808597,
+      "grad_norm": null,
+      "iterations": 10,
+      "notes": "theta target 45.0 deg, measured 45.1226 deg, error 0.1226 deg; volume rel error 8.03e-15",
+      "optimizer": "augmented_lagrangian+lbfgs",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": 0.9951682116911771,
+      "wall_time": null
+    }
+  ],
+  "passed": true,
+  "periodic_passed": true,
+  "se_reference": {
+    "analytic": 2.0943951023931953,
+    "declared_volume": 2.0943951023931953,
+    "note": "SE's contact-line facets are not reproduced; only its declared body volume is compared"
+  },
+  "sessile_passed": true
+}
