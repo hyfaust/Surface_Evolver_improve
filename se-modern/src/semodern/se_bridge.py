@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator
 
-from .io_fe import load_dmp
+from .io_fe import load_dmp, parse_fe
 from .mesh import Mesh
 
 FALLBACK_BINARIES = (
@@ -27,10 +27,11 @@ FALLBACK_BINARIES = (
 )
 SE_TIMEOUT_SECONDS = 300
 _DUMP_RE = re.compile(r'dump\s+"([^"]+)"')
+_AREA_ENERGY_PRINT = 'printf "SE_SCALARS %.17g nan %.17g\\n", total_area, total_energy;'
+_BODY_PRINT = 'printf "SE_SCALARS %.17g %.17g %.17g\\n", total_area, body[1].volume, total_energy;'
 _SCALARS_RE = re.compile(r"SE_SCALARS\s+(\S+)\s+(\S+)\s+(\S+)")
 _ENERGY_RE = re.compile(r"//\s*Total energy:\s*([-\d.eEdD+]+)")
 _ACTUAL_VOLUME_RE = re.compile(r"/\*actual:\s*([-\d.eEdD+]+)\s*\*/")
-_SCALAR_PRINT = 'printf "SE_SCALARS %.17g %.17g %.17g\\n", total_area, body[1].volume, total_energy;'
 
 
 @dataclass
@@ -115,7 +116,7 @@ def run_se_commands(fe_path: str | Path, commands: str, workdir: str | Path) -> 
         dump_path=dump_path,
         mesh=load_dmp(dump_path) if completed.returncode == 0 and dump_path.is_file() else None,
         area=_number(scalars.group(1)) if scalars else None,
-        volume=_number(scalars.group(2)) if scalars else None,
+        volume=_optional_number(scalars.group(2)) if scalars else None,
         energy=_number(scalars.group(3)) if scalars else (_number(energy.group(1)) if energy else None),
         dump_volume=_number(actual_volume.group(1)) if actual_volume else None,
     )
@@ -145,7 +146,8 @@ def run_se_timed(
     """
     script = commands.strip().rstrip(";")
     prefix = f"{script};\n" if script else ""
-    probe = f"{_SCALAR_PRINT}\n" if with_scalars else ""
+    print_body = _BODY_PRINT if body_count(fe_path) else _AREA_ENERGY_PRINT
+    probe = f"{print_body}\n" if with_scalars else ""
     return run_se_commands(fe_path, f'{prefix}{probe}dump "{name}";', workdir)
 
 
@@ -157,5 +159,20 @@ def dump_initial(fe_path: str | Path, workdir: str | Path, *, name: str = "out.d
     return result.mesh
 
 
+def body_count(fe_path: str | Path) -> int:
+    """Number of bodies declared by a datafile (0 for open surfaces such as `cat.fe`)."""
+    parsed = parse_fe(fe_path)
+    return len(parsed.bodies)
+
+
 def _number(token: str) -> float:
     return float(token.replace("d", "e").replace("D", "e"))
+
+
+def _optional_number(token: str) -> float | None:
+    """Parse an SE scalar that may be printed as `nan` for bodiless surfaces."""
+    try:
+        value = _number(token)
+    except ValueError:
+        return None
+    return None if value != value else value
