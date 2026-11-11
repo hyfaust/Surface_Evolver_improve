@@ -8,3 +8,14 @@ se-modern/reports/results.json
 se-modern/reports/smoke_cube.json
 se-modern/reports/*.png
 se-modern/reports/*.ply
+
+# Local Surface Evolver scratch artifacts at the repository root.
+# These are throwaway files produced while probing SE; they are kept on disk but
+# are not part of the project and must never be committed.
+/*.fe
+/*.cmd
+/*.csv
+/*.dmp
+/*.ply
+/*.obj
+/*.stl
