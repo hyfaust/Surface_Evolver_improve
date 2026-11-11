@@ -1,0 +1,103 @@
+{
+  "branch": "b4",
+  "case": "phasefield",
+  "cases": [
+    {
+      "area": null,
+      "branch": "b4",
+      "case": "phasefield_sphere",
+      "energy": 1.1697949041011668,
+      "grad_norm": null,
+      "iterations": 120,
+      "notes": "N=32 eps=0.1250; radius 0.3036 -> 0.3036 (1.19% error); energy 1.1798 -> 1.1698; monotone=True",
+      "optimizer": "allen_cahn",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": 0.11718749999999999,
+      "wall_time": 0.315116599900648
+    },
+    {
+      "area": null,
+      "branch": "b4",
+      "case": "phasefield_sphere",
+      "energy": 1.1107248136757368,
+      "grad_norm": null,
+      "iterations": 120,
+      "notes": "N=48 eps=0.0833; radius 0.3003 -> 0.3003 (0.10% error); energy 1.1154 -> 1.1107; monotone=True",
+      "optimizer": "allen_cahn",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": 0.11342592592592592,
+      "wall_time": 0.43648230005055666
+    },
+    {
+      "area": null,
+      "branch": "b4",
+      "case": "phasefield_merge",
+      "energy": 0.7569237696455849,
+      "grad_norm": null,
+      "iterations": 60,
+      "notes": "N=32; components 1 -> 1 for a touching pair, 2 for a separated pair; no mesh surgery involved",
+      "optimizer": "allen_cahn",
+      "passed": true,
+      "se_area": null,
+      "se_energy": null,
+      "volume": null,
+      "wall_time": null
+    }
+  ],
+  "limits": [
+    "Absolute energies are diffuse and not comparable with SE's sharp-interface values",
+    "eps must be resolved against dx and against the feature radius (eps <= r/2)",
+    "The conserved quantity is the excess order parameter, so a thickening interface shrinks the phi > 0 core over long integrations"
+  ],
+  "merge": {
+    "components_after": 1,
+    "components_before": 1,
+    "eps": 0.09375,
+    "final_energy": 0.7569237696455849,
+    "monotone": true,
+    "n": 32,
+    "separated_components": 2,
+    "steps": 60
+  },
+  "merge_gate": true,
+  "passed": true,
+  "radius_gate": true,
+  "refinement": [
+    {
+      "components": 1,
+      "dt": 0.064,
+      "dx": 0.0625,
+      "eps": 0.125,
+      "excess_error": 1.1102230246251565e-16,
+      "final_energy": 1.1697949041011668,
+      "final_radius": 0.3035737578756601,
+      "initial_energy": 1.179839120542046,
+      "initial_radius": 0.3035737578756601,
+      "monotone": true,
+      "n": 32,
+      "radius_error": 0.01191252625220037,
+      "steps": 120,
+      "wall_time": 0.315116599900648
+    },
+    {
+      "components": 1,
+      "dt": 0.14400000000000002,
+      "dx": 0.041666666666666664,
+      "eps": 0.08333333333333333,
+      "excess_error": 3.3306690738754696e-16,
+      "final_energy": 1.1107248136757368,
+      "final_radius": 0.3002902567788063,
+      "initial_energy": 1.1153508814590098,
+      "initial_radius": 0.3002902567788063,
+      "monotone": true,
+      "n": 48,
+      "radius_error": 0.0009675225960209533,
+      "steps": 120,
+      "wall_time": 0.43648230005055666
+    }
+  ]
+}
