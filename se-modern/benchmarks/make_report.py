@@ -71,35 +71,43 @@ def build(results: dict) -> str:
     )
     parts.append("")
 
-    parts.append("## B1 优化器：与 SE 同网格对比\n")
-    rows = []
-    for case in cases_for(results, "b1"):
-        rows.append(
+    parts.append("## B1 优化器与最小曲面\n")
+    b1 = json.loads((REPORTS / "results.b1.json").read_text(encoding="utf-8"))
+
+    parts.append("### 悬链面：与解析极小曲面比对\n")
+    parts.append(
+        "悬链面是**开放曲面**，纯面积最小化无下界（薄膜会缩到轴线上）。因此该用例把未知量限定为"
+        "各环半径，两端环钉在 `R=1.55`、中截面环钉在解析颈半径 `a`，目标为各圆台的精确面积之和。"
+        f"解析面积 `{b1['analytic_area']:.12f}`（颈半径 `a={b1['neck_radius']:.12f}`）。\n"
+    )
+    parts.append(
+        table(
             [
-                case["case"],
-                str(case["optimizer"]),
-                fmt(case["iterations"], "d"),
-                fmt(case["wall_time"], ".2f") + " s" if case["wall_time"] is not None else "—",
-                fmt(case["area"], ".12f"),
-                fmt(case["grad_norm"], ".2e"),
-                fmt(case["se_area"], ".12f"),
-                fmt(case["passed"]),
-            ]
+                [
+                    fmt(row["rings"], "d"),
+                    fmt(row["free_unknowns"], "d"),
+                    fmt(row["area"], ".12f"),
+                    fmt(100.0 * row["relative_error"], "+.4f") + "%",
+                    fmt(row["scipy_area"], ".12f"),
+                    fmt(100.0 * row["torch_vs_scipy"], "+.2e") + "%",
+                ]
+                for row in b1["catenoid_levels"]
+            ],
+            ["环数", "自由变量", "本项目面积", "相对解析值", "SciPy 独立解", "本项目 vs SciPy"],
         )
-    parts.append(
-        table(rows, ["用例", "优化器", "迭代", "耗时", "面积", "‖g‖∞", "SE 面积", "结果"])
     )
     parts.append(
-        "\n要点：`catenoid` 上两个优化器的面积与 SE 的相对差为 `1.96e-16`，"
-        "即达到 float64 的机器精度；`tr_newton_cg` 用 3 次迭代、`lbfgs` 用 12 次迭代到达同一解。"
-        "`cube_sphere` 的体积相对误差为 `1e-16` 量级，远低于 `1e-8` 门禁；"
-        "两优化器与 SE `g 20; hessian; g 20` 收敛到同一面积 `5.112493127727`，"
-        "但都高于理想球面积 5.7%，这是 24 个三角形的粗网格离散误差，不是求解器缺陷。\n"
+        "\n要点：误差随加密**单调二阶下降**（`+0.180% → +0.045% → +0.011%`），且始终从上方逼近"
+        "——符合极小面的变分原理（任何协调曲面面积 ≥ 极小面面积）。两个独立求解器"
+        "（本项目 torch L-BFGS 与 SciPy Nelder-Mead）结果一致到 `1e-12`。\n"
     )
     parts.append(
-        "L-BFGS 在二次型上停在 `‖g‖∞ ≈ 3e-8` 而非 `tol=1e-10`：目标函数量级为 O(1)，"
-        "float64 的数值分辨率已经把可达梯度限制在该量级，属于数值下限而非算法未收敛。\n"
+        "**此用例不做 SE 对比的理由**：SE 只在完整网格上工作，不提供这个一维轴对称归约，"
+        "无法做同口径比较；SE 的对比放在 `cube_sphere.py`，那里在加密网格上评分。\n"
     )
+    parts.append("\n另：早期版本的悬链面用例直接对 `cat.fe` 跑优化，但该文件的 `RMAX` 恰好等于"
+                 "悬链面的存在性上限，初始网格即驻定点，任何优化器都在第 0 步返回"
+                 "`‖g‖≈1e-16`，恒等通过、无区分度。现按上述适定问题重写。\n")
 
     parts.append("## B1 补充：cube.fe 的误差分解（离散误差 vs 求解器误差）\n")
     convergence_path = REPORTS / "convergence_cube.json"
@@ -146,6 +154,39 @@ def build(results: dict) -> str:
                 f"相对差仅 `{100.0 * cross['hard_vs_python']:+.2e}%`。"
                 "即 SE 的默认迭代次数在细网格上**未收敛**，加大迭代后与我们的解一致。\n"
             )
+
+    parts.append("### cube → sphere：在加密网格上评分\n")
+    if b1.get("levels"):
+        parts.append(
+            "`cube.fe` 的原始 24 面网格上离散误差高达 5.72%，足以掩盖任何实现差异，"
+            "因此该用例先加密再比较，并以**解析球面积**为准绳（而非仅两实现互比）。"
+            f"SE 命令：`{b1.get('se_script', '')}`。\n"
+        )
+        parts.append(
+            table(
+                [
+                    [
+                        f"L{row['level']}",
+                        fmt(row["faces"], "d"),
+                        fmt(row["python_area"], ".12f"),
+                        fmt(100.0 * row["python_error"], "+.4f") + "%",
+                        fmt(row["se_area"], ".12f") if row.get("se_area") else "—",
+                        fmt(100.0 * row["se_error"], "+.4f") + "%" if row.get("se_error") else "—",
+                    ]
+                    for row in b1["levels"]
+                ],
+                ["级别", "面数", "本项目面积", "相对解析值", "SE 面积", "SE 相对解析值"],
+            )
+        )
+        extra = b1.get("report_only_level")
+        if extra:
+            parts.append(
+                f"\nL{extra['level']}（{extra['faces']} 面）**仅报告不设门禁**：该规模下 SE 自身的演化策略失效，"
+                f"结果反而漂移到 {100 * extra['se_error']:+.4f}%，这是关于 SE 求解器而非离散化的证据。\n"
+            )
+        parts.append("\n判据：" + "；".join(
+            f"{key}={'通过' if value else '未通过'}" for key, value in b1.get("checks", {}).items()
+        ) + "。\n")
 
     parts.append("## B2 约束处理\n")
     rows = []

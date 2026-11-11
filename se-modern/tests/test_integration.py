@@ -111,3 +111,32 @@ def test_convergence_report_separates_discretization_from_solver_error() -> None
     assert errors[0] > 0.05
     assert errors[-1] < 0.001
     assert errors[-1] < errors[0]
+
+
+@pytest.mark.skipif(not RESULTS.exists(), reason="run benchmarks/run_all.py first")
+def test_b1_benchmarks_grade_against_analytic_solutions() -> None:
+    """B1 must compare against closed-form values, not merely implementation-vs-implementation.
+
+    Guards the fix for the earlier design, where the catenoid case compared two codes on a
+    mesh that was already stationary (so it always passed) and the cube-to-sphere case
+    compared them on a 24-triangle mesh where a 5.72% discretization error swamped any
+    difference.
+    """
+    path = PROJECT_ROOT / "reports" / "results.b1.json"
+    if not path.exists():
+        pytest.skip("run benchmarks/catenoid.py and benchmarks/cube_sphere.py first")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    # Catenoid: check the area gate and that refinement converges from above.
+    levels = payload["catenoid_levels"]
+    assert payload["analytic_area"] > 0.0
+    errors = [row["relative_error"] for row in levels]
+    assert all(error > 0.0 for error in errors), "discrete area must exceed the minimal surface"
+    assert errors == sorted(errors, reverse=True), "error must shrink with refinement"
+    assert abs(errors[-1]) < 5e-4
+
+    # Cube-to-sphere: graded on a refined mesh against the analytic sphere area.
+    cube = payload["levels"]
+    assert min(row["faces"] for row in cube) >= 384, "must not be graded on the raw 24-triangle mesh"
+    assert abs(cube[-1]["python_error"]) < 2e-3
+    assert abs(cube[-1]["cross_relative"]) < 1e-3
