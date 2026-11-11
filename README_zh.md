@@ -7,7 +7,7 @@
 [![版本](https://img.shields.io/badge/version-0.1.0-green.svg)]()
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)]()
 [![许可](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
-[![测试](https://img.shields.io/badge/tests-129%20passing-brightgreen.svg)]()
+[![测试](https://img.shields.io/badge/tests-132%20passing-brightgreen.svg)]()
 
 !!! warning "AI 生成内容声明"
     整个项目由 AI 生成，仅供参考。其中的内容、代码示例与文档均在 AI 辅助下创建。尽管我们已尽力保证准确性，但在用于生产环境之前，请自行核实全部信息并测试代码。使用风险自负。
@@ -52,7 +52,7 @@ Surface Evolver（SE）把皂膜表示为具有任意拓扑的显式三角曲面
 | 分支 | 替换的内容 | 门禁 | 实测结果 |
 |---|---|---|---|
 | Phase 0 | 网格、`.fe`/`.dmp` 读写、能量 | 面积/体积与 SE 的偏差在 `1e-10` 内 | 相对误差 **2e-16** |
-| B1 | 优化器 | `‖g‖∞ < 1e-6`，面积与 SE 偏差 `< 1e-6` | 面积与 SE 一致到 **1.96e-16**；TR-CG 用 3 次迭代收敛，L-BFGS 需 12 次 |
+| B1 | 优化器与极小曲面 | 在加密网格上与解析面积对比 | 悬链面从上方二阶收敛 `+0.180% → +0.045% → +0.011%`（与独立 SciPy 解一致到 `1e-12`）；cube→sphere 在 1536 面下距 `4πr²` 仅 **0.084%**，与收敛后的 SE 相对差 **5e-4%** |
 | B2 | 体积 / 接触角 / 周期性 / 各向异性 | 体积 `< 1e-8`，角度 `< 0.5°` | 体积误差 **4e-15**；接触角在 **0.245°** 以内 |
 | B3 | 拓扑手术 | 100 次随机操作中 0 次不变式失败 | **0 次失败** |
 | B4 | 相场（Allen-Cahn） | 半径误差 `< 5%`，合并为 1 个连通分量 | N=32 时 **1.19%**，N=48 时 **0.10%**；连通分量 2 → 1 |
@@ -257,7 +257,7 @@ evolver_alternative/
     │   ├── meshfree_catenoid.py # B5：RBF-FD 对照精确剖面
     │   ├── run_all.py           # 运行全部基准、合并报告
     │   └── make_report.py       # 从 results.json 生成 reports/REPORT.md
-    ├── tests/                   # 129 个测试
+    ├── tests/                   # 132 个测试
     ├── data/se/                 # 六个随仓库提供的 SE 数据文件
     └── reports/                 # results.json、results.b*.json、REPORT.md
 ```
@@ -269,7 +269,7 @@ evolver_alternative/
 ```bash
 export PYTHONPATH=src          # Windows cmd 下：set PYTHONPATH=src
 
-# 完整测试套件（129 个测试）
+# 完整测试套件（132 个测试）
 python -m pytest -q
 
 # 只跑某一领域
