@@ -15,7 +15,7 @@
       "se_area": null,
       "se_energy": null,
       "volume": 0.11718749999999999,
-      "wall_time": 0.315116599900648
+      "wall_time": 0.301757600158453
     },
     {
       "area": null,
@@ -30,7 +30,7 @@
       "se_area": null,
       "se_energy": null,
       "volume": 0.11342592592592592,
-      "wall_time": 0.43648230005055666
+      "wall_time": 0.4319664998911321
     },
     {
       "area": null,
@@ -81,7 +81,7 @@
       "n": 32,
       "radius_error": 0.01191252625220037,
       "steps": 120,
-      "wall_time": 0.315116599900648
+      "wall_time": 0.301757600158453
     },
     {
       "components": 1,
@@ -97,7 +97,7 @@
       "n": 48,
       "radius_error": 0.0009675225960209533,
       "steps": 120,
-      "wall_time": 0.43648230005055666
+      "wall_time": 0.4319664998911321
     }
   ]
 }
