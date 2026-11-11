@@ -1,0 +1,90 @@
+{
+  "case": "cube_convergence",
+  "cross_check": {
+    "hard_error": 0.0033450202575222416,
+    "hard_vs_python": -1.0910327162262548e-09,
+    "level": 2,
+    "light_error": 0.0033450213522044857,
+    "python_area": 4.852152304566711,
+    "se_hard_area": 4.852152299272854,
+    "se_light_area": 4.8551945616215715
+  },
+  "ideal_area": 4.83597586204941,
+  "levels": [
+    {
+      "faces": 24,
+      "level": 0,
+      "python_area": 5.112493123318739,
+      "python_error": 0.27651726126932896,
+      "python_relative_error": 0.057179206256861945,
+      "python_vs_se_light": -8.623307637793231e-10,
+      "se_light_area": 5.112493127727399,
+      "vertices": 14,
+      "volume_residual": 1.2934963100619257e-09
+    },
+    {
+      "faces": 96,
+      "level": 1,
+      "python_area": 4.901955727449996,
+      "python_error": 0.06597986540058631,
+      "python_relative_error": 0.013643547296910016,
+      "python_vs_se_light": -3.656974304213742e-09,
+      "se_light_area": 4.9019557453763225,
+      "vertices": 50,
+      "volume_residual": 1.1796448262657577e-09
+    },
+    {
+      "faces": 384,
+      "level": 2,
+      "python_area": 4.852152304566711,
+      "python_error": 0.01617644251730077,
+      "python_relative_error": 0.0033450213522044857,
+      "python_vs_se_light": -0.0006265983816402706,
+      "se_light_area": 4.8551945616215715,
+      "vertices": 194,
+      "volume_residual": 1.632135093743159e-09
+    },
+    {
+      "faces": 1536,
+      "level": 3,
+      "python_area": 4.840025337879541,
+      "python_error": 0.004049475830131044,
+      "python_relative_error": 0.0008373647730356827,
+      "python_vs_se_light": -0.000996149628002671,
+      "se_light_area": 4.8448515349337935,
+      "vertices": 770,
+      "volume_residual": 7.947122215856695e-07
+    },
+    {
+      "faces": 6144,
+      "level": 4,
+      "python_area": 4.838113416440368,
+      "python_error": 0.0021375543909583072,
+      "python_relative_error": 0.00044201097191838454,
+      "python_vs_se_light": -0.0018996826643035661,
+      "se_light_area": 4.847321789612396,
+      "vertices": 3074,
+      "volume_residual": 4.863780489472447e-10
+    }
+  ],
+  "passed": true,
+  "richardson": {
+    "estimates": {
+      "order_1": 4.836201495001196,
+      "order_2": 4.837476109293977
+    },
+    "from_faces": [
+      1536,
+      6144
+    ],
+    "refinement_ratio": 2.0
+  },
+  "se_hard_script": "g 100; hessian; g 50; hessian; g 50; U; g 200",
+  "se_light_script": "g 50; hessian; g 20; hessian; g 20",
+  "summary": {
+    "coarsest_relative_error": 0.057179206256861945,
+    "finest_relative_error": 0.00044201097191838454,
+    "solver_agreement_at_coarsest": 8.623307637793231e-10,
+    "verdict": "The 5.7% gap on the raw datafile is discretization, not solver error: our solver and SE agree to ~1e-9 relative there, and both converge toward the analytic area as the mesh is refined."
+  }
+}

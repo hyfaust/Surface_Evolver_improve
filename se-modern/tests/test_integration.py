@@ -82,3 +82,32 @@ def test_run_all_fails_closed_when_nothing_is_selected(tmp_path) -> None:
     assert payload["passed"] is False
     assert payload["notes"] == "no benchmark selected; nothing was verified"
     assert payload["runs"] == []
+
+
+def test_ideal_sphere_area_matches_closed_form() -> None:
+    # The analytic target the convergence study compares against: area of the unit-volume sphere.
+    import math
+
+    radius = (3.0 / (4.0 * math.pi)) ** (1.0 / 3.0)
+    assert 4.0 * math.pi * radius**2 == pytest.approx(4.83597586204941, rel=1e-13)
+
+
+@pytest.mark.skipif(not RESULTS.exists(), reason="run benchmarks/run_all.py first")
+def test_convergence_report_separates_discretization_from_solver_error() -> None:
+    """The cube's 5.7% gap must be attributed to discretization, with evidence.
+
+    Guards the claim made in `REPORT.md`: on the raw 24-triangle mesh our solver and SE
+    agree to ~1e-9 relative, so the gap to the analytic area is geometry, not numerics.
+    """
+    path = PROJECT_ROOT / "reports" / "convergence_cube.json"
+    if not path.exists():
+        pytest.skip("run benchmarks/convergence_cube.py first")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    coarsest = payload["levels"][0]
+    # Same discrete problem, two independent implementations: they must agree.
+    assert abs(coarsest["python_vs_se_light"]) < 1e-6
+    # And the gap must shrink as the mesh refines.
+    errors = [row["python_relative_error"] for row in payload["levels"]]
+    assert errors[0] > 0.05
+    assert errors[-1] < 0.001
+    assert errors[-1] < errors[0]

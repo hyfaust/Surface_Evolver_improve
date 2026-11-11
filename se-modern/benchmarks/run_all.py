@@ -56,6 +56,7 @@ BENCHMARKS = (
     ("smoke", "smoke_cube", "smoke"),
     ("b1-catenoid", "catenoid", "b1"),
     ("b1-cube-sphere", "cube_sphere", "b1"),
+    ("b1-convergence", "convergence_cube", "b1"),
     ("b2-sessile", "sessile_cap", "b2"),
     ("b2-periodic", "periodic_graph", "b2"),
     ("b2-anisotropic", "anisotropic", "b2"),

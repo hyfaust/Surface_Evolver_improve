@@ -101,6 +101,52 @@ def build(results: dict) -> str:
         "float64 的数值分辨率已经把可达梯度限制在该量级，属于数值下限而非算法未收敛。\n"
     )
 
+    parts.append("## B1 补充：cube.fe 的误差分解（离散误差 vs 求解器误差）\n")
+    convergence_path = REPORTS / "convergence_cube.json"
+    if convergence_path.exists():
+        conv = json.loads(convergence_path.read_text(encoding="utf-8"))
+        ideal = conv["ideal_area"]
+        parts.append(
+            f"`cube.fe` 的原始网格（24 个三角形）收敛到 `5.1124931`，比同体积理论球面积 "
+            f"`4.8359758620` 高 **5.7%**。为判定这 5.7% 属于离散误差还是求解器误差，"
+            f"在每一级加密网格上让 SE 与本项目求解同一离散问题：\n"
+        )
+        parts.append(
+            table(
+                [
+                    [
+                        f"L{row['level']}",
+                        fmt(row["faces"], "d"),
+                        fmt(row["python_area"], ".12f"),
+                        fmt(100.0 * row["python_relative_error"], "+.4f") + "%",
+                        fmt(row["se_light_area"], ".12f"),
+                        fmt(100.0 * row["python_vs_se_light"], "+.2e") + "%"
+                        if row.get("python_vs_se_light") is not None
+                        else "—",
+                    ]
+                    for row in conv["levels"]
+                ],
+                ["级别", "面数", "本项目面积", "相对理论值", "SE 面积", "本项目 vs SE"],
+            )
+        )
+        parts.append(
+            "\n要点：在双方都收敛的级别上，两个独立实现的相对差在 **1e-7 ~ 1e-9** 量级"
+            "（L0 `8.6e-8%`、L1 `3.7e-7%`），说明实现本身没有误差，"
+            "5.7% 完全来自 24 个三角形对球面的几何逼近误差。加密到 6144 个三角形后"
+            f"降到 {100.0 * conv['levels'][-1]['python_relative_error']:+.3f}%，"
+            "Richardson 外推（一阶）为 "
+            f"`{conv['richardson']['estimates']['order_1']:.12f}`，"
+            f"距理论值仅 {100.0 * (conv['richardson']['estimates']['order_1'] - ideal) / ideal:+.4f}%。\n"
+        )
+        cross = conv.get("cross_check")
+        if cross:
+            parts.append(
+                f"交叉验证（L{cross['level']}）：SE 用默认迭代得到 `{cross['se_light_area']:.12f}`，"
+                f"加大迭代后为 `{cross['se_hard_area']:.12f}`，与本项目 `{cross['python_area']:.12f}` "
+                f"相对差仅 `{100.0 * cross['hard_vs_python']:+.2e}%`。"
+                "即 SE 的默认迭代次数在细网格上**未收敛**，加大迭代后与我们的解一致。\n"
+            )
+
     parts.append("## B2 约束处理\n")
     rows = []
     for case in cases_for(results, "b2"):
