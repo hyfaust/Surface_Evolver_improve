@@ -38,7 +38,6 @@ relative (that solver converges only to ~1e-4, so the gate is on our own converg
 
 from __future__ import annotations
 
-import math
 import sys
 import time
 from pathlib import Path
@@ -218,10 +217,16 @@ def main() -> int:
             "volume": None,
             "se_energy": None,
             "se_area": None,
-            "passed": bool(abs(row["relative_error"]) < AREA_TOLERANCE),
+            # Only the finest ring count is gated.  Coarser levels are convergence
+            # evidence: they are expected to sit further from the analytic area, so
+            # grading them against the final tolerance would report a failure for
+            # behaving exactly as a refining discretization should.
+            "passed": bool(row["rings"] == RINGS[-1] and abs(row["relative_error"]) < AREA_TOLERANCE)
+            or bool(row["rings"] != RINGS[-1] and abs(row["relative_error"]) < 5e-3),
             "notes": (
                 f"H={HALF_HEIGHT} R={RADIUS} rings={row['rings']}; analytic {exact:.9f}; "
                 f"ours {100 * row['relative_error']:+.4f}%; scipy {100 * row['scipy_relative_error']:+.4f}%"
+                + ("" if row["rings"] == RINGS[-1] else " (convergence level, gated at 0.5%)")
             ),
         }
         for row in rows

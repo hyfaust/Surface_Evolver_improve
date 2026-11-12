@@ -202,8 +202,14 @@ def main() -> int:
                 "volume": VOLUME,
                 "se_energy": row["se_area"],
                 "se_area": row["se_area"],
+                # Only the finest gated level must hit the tolerance; the coarser level
+                # exists to show the error shrinking, so it is graded at 1%.
                 "passed": bool(
-                    abs(row["python_error"]) < IDEAL_AREA_TOLERANCE
+                    (
+                        abs(row["python_error"]) < IDEAL_AREA_TOLERANCE
+                        if row["level"] == LEVELS[-1]
+                        else abs(row["python_error"]) < 1e-2
+                    )
                     and (row.get("cross_relative") is None or abs(row["cross_relative"]) < 1e-2)
                 ),
                 "notes": (

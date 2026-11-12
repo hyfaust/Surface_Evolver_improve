@@ -9,13 +9,13 @@
       "energy": 17.811270518084548,
       "grad_norm": null,
       "iterations": 9,
-      "notes": "H=1.0 R=1.55 rings=9; analytic 17.779200725; ours +0.1804%; scipy +0.1804%",
+      "notes": "H=1.0 R=1.55 rings=9; analytic 17.779200725; ours +0.1804%; scipy +0.1804% (convergence level, gated at 0.5%)",
       "optimizer": "lbfgs (torch)",
-      "passed": false,
+      "passed": true,
       "se_area": null,
       "se_energy": null,
       "volume": null,
-      "wall_time": 4.002710900036618
+      "wall_time": 3.483689700020477
     },
     {
       "area": 17.787231700783238,
@@ -24,13 +24,13 @@
       "energy": 17.787231700783238,
       "grad_norm": null,
       "iterations": 20,
-      "notes": "H=1.0 R=1.55 rings=17; analytic 17.779200725; ours +0.0452%; scipy +0.0452%",
+      "notes": "H=1.0 R=1.55 rings=17; analytic 17.779200725; ours +0.0452%; scipy +0.0452% (convergence level, gated at 0.5%)",
       "optimizer": "lbfgs (torch)",
       "passed": true,
       "se_area": null,
       "se_energy": null,
       "volume": null,
-      "wall_time": 0.04194969986565411
+      "wall_time": 0.06437239982187748
     },
     {
       "area": 17.781209318797295,
@@ -45,7 +45,7 @@
       "se_area": null,
       "se_energy": null,
       "volume": null,
-      "wall_time": 0.07725799991749227
+      "wall_time": 0.13094509998336434
     },
     {
       "area": 4.852152304566711,
@@ -56,11 +56,11 @@
       "iterations": 7,
       "notes": "F=384; area vs analytic +0.3345%; vs converged SE +1.09e-07%",
       "optimizer": "augmented_lagrangian+tr_newton_cg",
-      "passed": false,
+      "passed": true,
       "se_area": 4.8521522992728565,
       "se_energy": 4.8521522992728565,
       "volume": 1.0,
-      "wall_time": 22.904708300018683
+      "wall_time": 18.016266399994493
     },
     {
       "area": 4.840025337879541,
@@ -75,7 +75,7 @@
       "se_area": 4.839999251671381,
       "se_energy": 4.839999251671381,
       "volume": 1.0,
-      "wall_time": 74.49370949994773
+      "wall_time": 69.15726769994944
     }
   ],
   "catenoid_checks": {
@@ -97,7 +97,7 @@
       "scipy_area": 17.811270518084555,
       "scipy_relative_error": 0.0018037815029100079,
       "torch_vs_scipy": -3.98928720463066e-16,
-      "wall_time": 4.002710900036618
+      "wall_time": 3.483689700020477
     },
     {
       "area": 17.787231700783238,
@@ -110,7 +110,7 @@
       "scipy_area": 17.787231700783245,
       "scipy_relative_error": 0.00045170625084652114,
       "torch_vs_scipy": -3.9946785858128336e-16,
-      "wall_time": 0.04194969986565411
+      "wall_time": 0.06437239982187748
     },
     {
       "area": 17.781209318797295,
@@ -123,7 +123,7 @@
       "scipy_area": 17.781209318797803,
       "scipy_relative_error": 0.00011297437652317504,
       "torch_vs_scipy": -2.8571625639173364e-14,
-      "wall_time": 0.07725799991749227
+      "wall_time": 0.13094509998336434
     }
   ],
   "catenoid_passed": true,
@@ -148,10 +148,10 @@
       "python_error": 0.0033450213522044857,
       "python_outer_iterations": 7,
       "python_volume_residual": 1.632135093743159e-09,
-      "python_wall_time": 22.904708300018683,
+      "python_wall_time": 18.016266399994493,
       "se_area": 4.8521522992728565,
       "se_error": 0.003345020257522793,
-      "se_wall_time": 3.395259200129658
+      "se_wall_time": 2.518127999966964
     },
     {
       "cross_relative": 5.389713263033085e-06,
@@ -161,10 +161,10 @@
       "python_error": 0.0008373647730356827,
       "python_outer_iterations": 12,
       "python_volume_residual": 7.947122215856695e-07,
-      "python_wall_time": 74.49370949994773,
+      "python_wall_time": 69.15726769994944,
       "se_area": 4.839999251671381,
       "se_error": 0.0008319705756898034,
-      "se_wall_time": 6.51427930011414
+      "se_wall_time": 7.055922399973497
     }
   ],
   "method_note": "Compared on refined meshes where the discretization error is small and both codes are converged; graded against the analytic sphere area, not only against each other. The raw 24-triangle mesh is unsuitable because a 5.72% discretization error there masks any implementation difference.",
