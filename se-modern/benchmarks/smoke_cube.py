@@ -27,7 +27,9 @@ import torch  # noqa: E402
 from semodern import io_fe, mesh as mesh_mod, se_bridge  # noqa: E402
 
 DATA = PROJECT_ROOT / "data" / "se" / "cube.fe"
-WORKDIR = PROJECT_ROOT / "tmp" / "smoke_cube"
+WORKDIR_BASE = PROJECT_ROOT / "tmp" / "smoke_cube"
+# Process-isolated scratch: prevents concurrent runs sharing run.cmd
+WORKDIR = se_bridge.isolated_workdir(WORKDIR_BASE)
 REPORT = PROJECT_ROOT / "reports" / "smoke_cube.json"
 EXPECTED_VERTS = 14
 EXPECTED_FACES = 24

@@ -11,6 +11,7 @@ command script printed.
 
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -80,6 +81,20 @@ def available() -> bool:
     except FileNotFoundError:
         return False
     return True
+
+
+def isolated_workdir(base: str | Path) -> Path:
+    """A per-process subdirectory of `base`, so concurrent runs cannot share `run.cmd`.
+
+    `run_se_commands` writes a fixed `run.cmd` inside its working directory.  Two
+    benchmarks (or a benchmark and a test session) that point at the same directory then
+    overwrite each other's command file, and one of them executes the other's script --
+    which shows up as sporadic, confusing failures.  Callers that may run concurrently
+    should route through this helper, which namespaces by process id.
+    """
+    path = Path(base) / f"pid{os.getpid()}"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
 
 
 def run_se_commands(fe_path: str | Path, commands: str, workdir: str | Path) -> SeRun:

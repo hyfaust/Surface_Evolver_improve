@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from semodern import io_fe, mesh as mesh_mod, se_bridge
@@ -65,3 +67,26 @@ def test_refine_increases_element_counts(data_se, workdir) -> None:
     assert run.mesh.n_faces > 24
     assert run.mesh.n_verts > 14
     mesh_mod.validate(run.mesh)
+
+
+def test_isolated_workdir_is_per_process_and_created(tmp_path) -> None:
+    """Concurrent runs must not share `run.cmd`.
+
+    `run_se_commands` writes a fixed filename into its working directory, so two callers
+    pointing at the same directory would overwrite each other's command script.  This was
+    observed as intermittent, unrelated test failures while a benchmark ran alongside the
+    suite; the helper below namespaces by process id.
+    """
+    first = se_bridge.isolated_workdir(tmp_path)
+    assert first.is_dir()
+    assert first.name == f"pid{os.getpid()}"
+    assert se_bridge.isolated_workdir(tmp_path) == first
+
+
+def test_isolated_workdirs_do_not_collide(tmp_path) -> None:
+    """Two distinct pids (simulated) get distinct directories."""
+    import pathlib
+
+    made = {pathlib.Path(tmp_path, f"pid{pid}") for pid in (1, 2)}
+    assert len(made) == 2
+    assert all(not path.exists() for path in made)

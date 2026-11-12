@@ -15,7 +15,7 @@
       "se_area": null,
       "se_energy": null,
       "volume": null,
-      "wall_time": 3.55485470010899
+      "wall_time": 4.002710900036618
     },
     {
       "area": 17.787231700783238,
@@ -30,7 +30,7 @@
       "se_area": null,
       "se_energy": null,
       "volume": null,
-      "wall_time": 0.13647580007091165
+      "wall_time": 0.04194969986565411
     },
     {
       "area": 17.781209318797295,
@@ -45,7 +45,7 @@
       "se_area": null,
       "se_energy": null,
       "volume": null,
-      "wall_time": 0.05948649998754263
+      "wall_time": 0.07725799991749227
     },
     {
       "area": 4.852152304566711,
@@ -60,7 +60,7 @@
       "se_area": 4.8521522992728565,
       "se_energy": 4.8521522992728565,
       "volume": 1.0,
-      "wall_time": 13.801264900015667
+      "wall_time": 22.904708300018683
     },
     {
       "area": 4.840025337879541,
@@ -75,7 +75,7 @@
       "se_area": 4.839999251671381,
       "se_energy": 4.839999251671381,
       "volume": 1.0,
-      "wall_time": 62.75891370000318
+      "wall_time": 74.49370949994773
     }
   ],
   "catenoid_checks": {
@@ -97,7 +97,7 @@
       "scipy_area": 17.811270518084555,
       "scipy_relative_error": 0.0018037815029100079,
       "torch_vs_scipy": -3.98928720463066e-16,
-      "wall_time": 3.55485470010899
+      "wall_time": 4.002710900036618
     },
     {
       "area": 17.787231700783238,
@@ -110,7 +110,7 @@
       "scipy_area": 17.787231700783245,
       "scipy_relative_error": 0.00045170625084652114,
       "torch_vs_scipy": -3.9946785858128336e-16,
-      "wall_time": 0.13647580007091165
+      "wall_time": 0.04194969986565411
     },
     {
       "area": 17.781209318797295,
@@ -123,7 +123,7 @@
       "scipy_area": 17.781209318797803,
       "scipy_relative_error": 0.00011297437652317504,
       "torch_vs_scipy": -2.8571625639173364e-14,
-      "wall_time": 0.05948649998754263
+      "wall_time": 0.07725799991749227
     }
   ],
   "catenoid_passed": true,
@@ -148,10 +148,10 @@
       "python_error": 0.0033450213522044857,
       "python_outer_iterations": 7,
       "python_volume_residual": 1.632135093743159e-09,
-      "python_wall_time": 13.801264900015667,
+      "python_wall_time": 22.904708300018683,
       "se_area": 4.8521522992728565,
       "se_error": 0.003345020257522793,
-      "se_wall_time": 1.8101834999397397
+      "se_wall_time": 3.395259200129658
     },
     {
       "cross_relative": 5.389713263033085e-06,
@@ -161,10 +161,10 @@
       "python_error": 0.0008373647730356827,
       "python_outer_iterations": 12,
       "python_volume_residual": 7.947122215856695e-07,
-      "python_wall_time": 62.75891370000318,
+      "python_wall_time": 74.49370949994773,
       "se_area": 4.839999251671381,
       "se_error": 0.0008319705756898034,
-      "se_wall_time": 5.371139799943194
+      "se_wall_time": 6.51427930011414
     }
   ],
   "method_note": "Compared on refined meshes where the discretization error is small and both codes are converged; graded against the analytic sphere area, not only against each other. The raw 24-triangle mesh is unsuitable because a 5.72% discretization error there masks any implementation difference.",

@@ -46,7 +46,9 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from semodern import constraints, energy, metrics, se_bridge  # noqa: E402
 
 DATA = PROJECT_ROOT / "data" / "se" / "cube.fe"
-WORKDIR = PROJECT_ROOT / "tmp" / "b1_cube_sphere"
+WORKDIR_BASE = PROJECT_ROOT / "tmp" / "b1_cube_sphere"
+# Process-isolated scratch: prevents concurrent runs sharing run.cmd
+WORKDIR = se_bridge.isolated_workdir(WORKDIR_BASE)
 REPORT = PROJECT_ROOT / "reports" / "results.b1.json"
 VOLUME = 1.0
 LEVELS = (2, 3)
