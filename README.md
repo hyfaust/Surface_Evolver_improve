@@ -58,6 +58,8 @@ Every replacement is measured against SE or against a closed-form solution. All 
 | B4 | Phase field (Allen-Cahn) | Radius error `< 5%`, merge to 1 component | **1.19%** at N=32, **0.10%** at N=48; 2 → 1 components |
 | B5 | Mesh-free RBF-FD | Profile error `< 1%`, residual `< 1e-6` | **1.22e-4** profile error, **8.8e-11** residual |
 
+Two of these rows deserve a note on method. The catenoid and the cube-to-sphere cases are graded on **refined meshes against closed-form areas**, not on the raw datafile mesh. On `cube.fe`'s 24 triangles the discretization error is 5.72% -- large enough that two implementations agreeing to `1e-9` both still sit 5.72% from the truth, so a coarse-mesh cross-check cannot distinguish them. The benchmarks therefore refine first (384 and 1536 triangles for the sphere; 9/17/33 rings for the catenoid), converge both codes, and report how the error shrinks. Measured convergence data is in `se-modern/reports/convergence_cube.json` and the B1 sections of the report.
+
 The study's conclusions — which parts of SE to keep, replace, or mix — are summarized in the [report's recommendation section](se-modern/reports/REPORT.md). In short: keep the explicit-surface formulation (accuracy, controllable topology, direct comparability with SE), replace the numerical kernel, and use the phase-field model for topology-dominated stages and the mesh-free solver for smooth axisymmetric subproblems.
 
 ## Prerequisites

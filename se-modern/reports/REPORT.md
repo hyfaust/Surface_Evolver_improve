@@ -181,12 +181,13 @@ E:\ProgramData\Miniconda3\envs\dlgpu\python.exe benchmarks\make_report.py
 
 | 标签 | 模块 | 耗时 | 状态 |
 |---|---|---|---|
-| smoke | smoke_cube | 1.21 s | ok |
-| b1-catenoid | catenoid | 1.66 s | ok |
-| b1-cube-sphere | cube_sphere | 1.17 s | ok |
-| b2-sessile | sessile_cap | 55.23 s | ok |
-| b2-periodic | periodic_graph | 1.63 s | ok |
-| b2-anisotropic | anisotropic | 2.28 s | ok |
-| b3-topology | octa_topology | 5.99 s | ok |
-| b4-phasefield | phasefield_sphere | 1.39 s | ok |
-| b5-meshfree | meshfree_catenoid | 0.68 s | ok |
+| smoke | smoke_cube | 1.48 s | ok |
+| b1-catenoid | catenoid | 6.57 s | ok |
+| b1-cube-sphere | cube_sphere | 111.86 s | ok |
+| b1-convergence | convergence_cube | 260.47 s | ok |
+| b2-sessile | sessile_cap | 60.55 s | ok |
+| b2-periodic | periodic_graph | 1.74 s | ok |
+| b2-anisotropic | anisotropic | 2.39 s | ok |
+| b3-topology | octa_topology | 7.37 s | ok |
+| b4-phasefield | phasefield_sphere | 1.05 s | ok |
+| b5-meshfree | meshfree_catenoid | 0.38 s | ok |
